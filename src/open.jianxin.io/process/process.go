@@ -45,9 +45,7 @@ func Start() {
 	ticker := time.NewTicker(time.Second * 10)
 	go func() {
 		for _ = range ticker.C {
-			go func() {
-				workder()
-			}()
+			workder()
 		}
 	}()
 }

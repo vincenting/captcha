@@ -20,9 +20,11 @@
 
 #### 下载并编译
 
+``
+
 `git clone https://github.com/jianxinio/captcha/`
 
-进入captcha文件夹后运行 `source install`
+进入captcha文件夹后运行 `source install.sh`
 
 `Downloading necessary files` 这步可能耗时很久，后面留意观察错误，如果下载完后持续报错可能是 imagemagic 安装有误
 
