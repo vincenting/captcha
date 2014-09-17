@@ -20,9 +20,10 @@
 
 #### 下载并编译
 
-``
-
 `git clone https://github.com/jianxinio/captcha/`
+
+或者 [下载](https://github.com/jianxinio/captcha/archive/master.zip) 并解压
+
 
 进入captcha文件夹后运行 `source install.sh`
 
