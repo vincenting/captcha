@@ -63,7 +63,21 @@
 
 BriefDesign 中有详细的设计文档。
 
-如果访问量很大担心 100 张缓存不够，建议修改 process.go 中 59 行的 100 至 1000。
+config.json 说明：
+
+	initial_count 初始化时产生的验证码数量
+	check_interval 检查使用量间隔
+	threshold 更新验证码阀值
+	update_count 更新的验证码数量
+
+如果访问量较大，建议提高 initial_count 以及 update_count
+
+更新配置文件后 reload 操作：
+
+reload 只支持 initial_count 以及 update_count 的修改
+
+操作方法： `kill -USR2 pid`
+
 
 #### 开源协议
 

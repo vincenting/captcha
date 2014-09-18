@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"captcha/captcha"
+	"captcha/config"
 )
 
 func Md5(text string) string {
@@ -39,10 +40,11 @@ func captchaGenerate(size int) []string {
 }
 
 func Start() {
-	captchas := captchaGenerate(100)
+	c := config.GetConfig()
+	captchas := captchaGenerate(c.InitialCount)
 	CaptchaContainer.Append(captchas...)
-	log.Print("Init success.")
-	ticker := time.NewTicker(time.Second * 10)
+	log.Print("init success.")
+	ticker := time.NewTicker(time.Second * time.Duration(c.CheckInterval))
 	go func() {
 		for _ = range ticker.C {
 			go workder()
@@ -54,7 +56,7 @@ func workder() {
 	if !CaptchaContainer.UpdateNeed() {
 		return
 	}
-	captchas := captchaGenerate(100)
+	captchas := captchaGenerate(config.GetConfig().UpdateCount)
 	CaptchaContainer.Lock()
 	oldCaptchas := CaptchaContainer.Update(captchas...)
 	CaptchaContainer.Unlock()
@@ -62,5 +64,5 @@ func workder() {
 		fileName := strings.Split(captcha, "|")[0]
 		os.Remove("../tmp/" + fileName)
 	}
-	log.Print("Update suceess.")
+	log.Print("update suceess.")
 }

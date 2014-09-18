@@ -3,6 +3,8 @@ package process
 import (
 	"errors"
 	"sync"
+
+	"captcha/config"
 )
 
 type Container struct {
@@ -41,7 +43,7 @@ func (c *Container) Update(items ...string) []string {
 func (c *Container) UpdateNeed() bool {
 	consumption := c.consumption
 	c.consumption = 0
-	if consumption < 30 {
+	if consumption < config.GetConfig().Threshold {
 		return false
 	}
 	return true

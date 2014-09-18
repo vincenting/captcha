@@ -27,6 +27,6 @@ mkdir -p build/bin
 
 cp src/captcha/config.json build
 cp -r src/captcha/assets build
-mv bin/server build/bin
+mv bin/server build/bin/captcha
 
 echo 'Finish'
