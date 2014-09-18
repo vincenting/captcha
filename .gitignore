@@ -3,7 +3,6 @@
 *.a
 *.so
 *.db
-config.json
 
 # Folders
 _obj
