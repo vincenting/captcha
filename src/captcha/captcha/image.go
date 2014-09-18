@@ -36,7 +36,7 @@ func child(path string) []string {
 
 func init() {
 	// get all fonts file here
-	fonts = child("../resource/fonts/")
+	fonts = child("../assets/fonts/")
 }
 
 func randFont() string {
@@ -86,7 +86,7 @@ func Draw(text string, name string) {
 	dw := imagick.NewDrawingWand()
 	// Set the size of the image
 	mw.SetSize(285, 50)
-	mw.ReadImage("../resource/images/bg.gif")
+	mw.ReadImage("../assets/images/bg.gif")
 
 	// Start near the left edge
 	dw.SetFontSize(40)

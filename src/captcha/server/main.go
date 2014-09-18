@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"open.jianxin.io/process"
+	"captcha/process"
 )
 
 func EncodeFile(bytes []byte) string {

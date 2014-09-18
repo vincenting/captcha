@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"open.jianxin.io/captcha"
+	"captcha/captcha"
 )
 
 func Md5(text string) string {
@@ -45,7 +45,7 @@ func Start() {
 	ticker := time.NewTicker(time.Second * 10)
 	go func() {
 		for _ = range ticker.C {
-			workder()
+			go workder()
 		}
 	}()
 }
