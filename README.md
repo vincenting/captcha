@@ -2,7 +2,7 @@
 
 目前在 mac centos6.x ubuntu14 上测试通过
 
-![demo.gif](https://raw.githubusercontent.com/jianxinio/captcha/master/src/open.jianxin.io/tmp/demo.gif)
+![demo.gif](https://raw.githubusercontent.com/jianxinio/captcha/master/src/captcha/tmp/demo.gif)
 
 - - -
 
