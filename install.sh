@@ -5,7 +5,8 @@ mkdir -p src
 mkdir -p pkg
 mkdir -p bin
 
-export GOPATH=$GOPATH:"$PWD"
+OLD_GOPATH=$GOPATH
+export GOPATH=$(cd `dirname $0`; pwd)
 
 # install necessary dependence
 echo 'Downloading necessary files'
@@ -29,4 +30,5 @@ cp src/captcha/config.json build
 cp -r src/captcha/assets build
 mv bin/server build/bin/captcha
 
+export GOPATH=$OLD_GOPATH
 echo 'Finish'
