@@ -52,11 +52,13 @@ func random(min, max int) int {
 func drawSetfont(mw *imagick.MagickWand, dw *imagick.DrawingWand) {
 	dw.SetFont(randFont())
 	pw := imagick.NewPixelWand()
+	defer pw.Destroy()
+
 	pw.SetColor(colors[rand.Intn(len(colors))])
 	dw.SetFontWeight(500)
 	dw.SetFillColor(pw)
 	dw.SetFontSize(33)
-	pw.Destroy()
+
 }
 
 func drawMetrics(mw *imagick.MagickWand, dw *imagick.DrawingWand, dx *float64, text string) {
@@ -84,6 +86,9 @@ func Draw(text string, name string) {
 
 	mw := imagick.NewMagickWand()
 	dw := imagick.NewDrawingWand()
+	defer mw.Destroy()
+	defer dw.Destroy()
+
 	// Set the size of the image
 	mw.SetSize(285, 50)
 	mw.ReadImage("../assets/images/bg.gif")
