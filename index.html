@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Captcha by jianxinio</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Captcha</h1>
+        <p>Golang 实现的验证码服务。</p>
+
+        <p class="view"><a href="https://github.com/jianxinio/captcha">View the Project on GitHub <small>jianxinio/captcha</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/jianxinio/captcha/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/jianxinio/captcha/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/jianxinio/captcha">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h2>
+<a name="%E9%AA%8C%E8%AF%81%E7%A0%81%E6%9C%8D%E5%8A%A1" class="anchor" href="#%E9%AA%8C%E8%AF%81%E7%A0%81%E6%9C%8D%E5%8A%A1"><span class="octicon octicon-link"></span></a>验证码服务</h2>
+
+<p>目前在 mac centos6.x ubuntu14 上测试通过</p>
+
+<p><img src="https://raw.githubusercontent.com/jianxinio/captcha/master/src/captcha/tmp/demo.gif" alt="demo.gif"></p>
+
+<hr><h4>
+<a name="%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C" class="anchor" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="octicon octicon-link"></span></a>准备工作</h4>
+
+<p>依赖安装： <code>golang</code> <code>imagemagic</code></p>
+
+<p>验证成功：</p>
+
+<p><code>pkg-config --cflags --libs MagickWand</code></p>
+
+<p><code>go version</code></p>
+
+<p>没有报错说明安装成功</p>
+
+<h4>
+<a name="%E4%B8%8B%E8%BD%BD%E5%B9%B6%E7%BC%96%E8%AF%91" class="anchor" href="#%E4%B8%8B%E8%BD%BD%E5%B9%B6%E7%BC%96%E8%AF%91"><span class="octicon octicon-link"></span></a>下载并编译</h4>
+
+<p><code>git clone https://github.com/jianxinio/captcha/</code></p>
+
+<p>或者 <a href="https://github.com/jianxinio/captcha/archive/master.zip">下载</a> 并解压</p>
+
+<p>进入captcha文件夹后运行 <code>source install.sh</code></p>
+
+<p><code>Downloading necessary files</code> 这步可能耗时很久，后面留意观察错误，如果下载完后持续报错可能是 imagemagic 安装有误</p>
+
+<p>如果一切顺利，可以看到多了一个 build 文件夹，其中</p>
+
+<ol>
+<li>bin 为可执行文件夹</li>
+<li>assets 为使用到的静态资源文件夹</li>
+<li>tmp 为缓存验证码文件</li>
+</ol><p>除了 build 文件夹外，其他文件不会再被使用</p>
+
+<h4>
+<a name="%E5%90%AF%E5%8A%A8" class="anchor" href="#%E5%90%AF%E5%8A%A8"><span class="octicon octicon-link"></span></a>启动</h4>
+
+<p>进入到 bin 文件夹，<code>./captcha</code> 即可启动。</p>
+
+<p>见到 <code>Init success.</code> 的提示说明初始化缓存生成成功。此时可以在 tmp 文件夹中看到 100 张验证码。</p>
+
+<p>线上环境请自备守护进程</p>
+
+<h4>
+<a name="%E7%A8%8B%E5%BA%8F%E9%9B%86%E6%88%90" class="anchor" href="#%E7%A8%8B%E5%BA%8F%E9%9B%86%E6%88%90"><span class="octicon octicon-link"></span></a>程序集成</h4>
+
+<p>访问 localhost:8001 即可见到验证码内容（格式为 base64(buffer)|result）。</p>
+
+<p>使用时需要先 split('|') 然后将 base64 解密后给前端。</p>
+
+<pre><code>get '/captcha' do
+  captcha = Faraday.get settings.captcha_server
+  captcha_arr = captcha.body.split('|')
+  @session['captcha_result'] = captcha_arr[1]
+  content_type 'image/gif'
+  Base64.decode64 captcha.body.split('|')[0]
+end
+</code></pre>
+
+<h4>
+<a name="%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE" class="anchor" href="#%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE"><span class="octicon octicon-link"></span></a>高级配置</h4>
+
+<p>BriefDesign 中有详细的设计文档。</p>
+
+<p>config.json 说明：</p>
+
+<pre><code>initial_count 初始化时产生的验证码数量
+check_interval 检查使用量间隔
+threshold 更新验证码阀值
+update_count 更新的验证码数量
+</code></pre>
+
+<p>如果访问量较大，建议提高 initial_count 以及 update_count</p>
+
+<p>更新配置文件后 reload 操作：</p>
+
+<p>reload 只支持 initial_count 以及 update_count 的修改</p>
+
+<p>操作方法： <code>kill -USR2 pid</code></p>
+
+<h4>
+<a name="%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE" class="anchor" href="#%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE"><span class="octicon octicon-link"></span></a>开源协议</h4>
+
+<p>MIT</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/jianxinio">jianxinio</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
